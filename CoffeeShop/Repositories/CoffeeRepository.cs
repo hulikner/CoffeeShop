@@ -28,9 +28,9 @@ namespace CoffeeShop.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT c.Id, c.Title, c.BeanVarietyId,
-                                               b.[Name], b.Region, b.Notes
+                                               bv.[Name], bv.Region, bv.Notes
                                         FROM Coffee c
-                                        LEFT JOIN BeanVariety b ON bv.Id = c.BeanVarietyId";
+                                        LEFT JOIN BeanVariety bv ON bv.Id = c.BeanVarietyId";
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         var coffees = new List<Coffee>();
@@ -66,9 +66,9 @@ namespace CoffeeShop.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT c.Id, c.Title, c.BeanVarietyId,
-                                               b.[Name], b.Region, b.Notes
+                                               bv.[Name], bv.Region, bv.Notes
                                         FROM Coffee c
-                                        LEFT JOIN BeanVariety b ON b.Id = c.BeanVarietyId
+                                        LEFT JOIN BeanVariety bv ON bv.Id = c.BeanVarietyId
                                         WHERE c.Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -104,10 +104,10 @@ namespace CoffeeShop.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"INSERT INTO Coffee (Title, BeanVarietyId)
-                                        OUTPUT INSERTTED.ID
-                                        VALUES (@title, @bId)";
+                                        OUTPUT INSERTED.ID
+                                        VALUES (@title, @bvId)";
                     cmd.Parameters.AddWithValue("@title", coffee.Title);
-                    cmd.Parameters.AddWithValue("@bId", coffee.BeanVarietyId);
+                    cmd.Parameters.AddWithValue("@bvId", coffee.BeanVarietyId);
                     coffee.Id = (int)cmd.ExecuteScalar();
                 }
             }
@@ -122,10 +122,10 @@ namespace CoffeeShop.Repositories
                 {
                     cmd.CommandText = @"UPDATE Coffee 
                                         SET Title = @title, 
-                                            BeanVarietyId = @bId
+                                            BeanVarietyId = @bvId
                                         WHERE Id = @id";
                     cmd.Parameters.AddWithValue("@title", coffee.Title);
-                    cmd.Parameters.AddWithValue("@bId", coffee.BeanVarietyId);
+                    cmd.Parameters.AddWithValue("@bvId", coffee.BeanVarietyId);
                     cmd.Parameters.AddWithValue("@id", coffee.Id);
                     cmd.ExecuteNonQuery();
                 }
